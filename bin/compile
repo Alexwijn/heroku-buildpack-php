@@ -604,12 +604,12 @@ export_env_dir "$env_dir" '^COMPOSER_GITLAB_OAUTH_TOKEN$'
 COMPOSER_GITLAB_OAUTH_TOKEN=${COMPOSER_GITLAB_OAUTH_TOKEN:-}
 
 if [[ -n "$COMPOSER_GITLAB_OAUTH_TOKEN" ]]; then
+	notice_inline 'Using $COMPOSER_GITLAB_OAUTH_TOKEN for GitLab OAuth ($COMPOSER_GITLAB_OAUTH_HOST).'
 	if curl --fail --silent -H "Private-Token: $COMPOSER_GITLAB_OAUTH_TOKEN" https://"$COMPOSER_GITLAB_OAUTH_HOST"/api/v4/license > /dev/null; then
 		composer config --no-plugins -g gitlab-oauth."$COMPOSER_GITLAB_OAUTH_HOST" "$COMPOSER_GITLAB_OAUTH_TOKEN" &> /dev/null # redirect outdated version warnings (Composer sends those to STDOUT instead of STDERR)
-		notice_inline 'Using $COMPOSER_GITLAB_OAUTH_TOKEN for GitLab OAuth ($COMPOSER_GITLAB_OAUTH_HOST).'
 	else
 		error <<-EOF
-			Invalid token for GitLab OAuth! (\$COMPOSER_GITLAB_OAUTH_HOST)
+			Invalid token for GitLab OAuth!
 			
 			The OAuth token set in the '\$COMPOSER_GITLAB_OAUTH_TOKEN'
 			config var is invalid. Please ensure that you obtain a valid
@@ -626,9 +626,9 @@ unset COMPOSER_GITLAB_OAUTH_TOKEN
 export_env_dir "$env_dir" '^COMPOSER_GITHUB_OAUTH_TOKEN$'
 COMPOSER_GITHUB_OAUTH_TOKEN=${COMPOSER_GITHUB_OAUTH_TOKEN:-}
 if [[ -n "$COMPOSER_GITHUB_OAUTH_TOKEN" ]]; then
+	notice_inline 'Using $COMPOSER_GITHUB_OAUTH_TOKEN for GitHub OAuth.'
 	if curl --fail --silent -H "Authorization: token $COMPOSER_GITHUB_OAUTH_TOKEN" https://api.github.com/rate_limit > /dev/null; then
 		composer config --no-plugins -g github-oauth.github.com "$COMPOSER_GITHUB_OAUTH_TOKEN" &> /dev/null # redirect outdated version warnings (Composer sends those to STDOUT instead of STDERR)
-		notice_inline 'Using $COMPOSER_GITHUB_OAUTH_TOKEN for GitHub OAuth.'
 	else
 		mcount "failures.dependencies.auth.COMPOSER_GITHUB_OAUTH_TOKEN"
 		error <<-EOF
