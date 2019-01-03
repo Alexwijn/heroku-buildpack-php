@@ -605,7 +605,7 @@ COMPOSER_GITLAB_OAUTH_TOKEN=${COMPOSER_GITLAB_OAUTH_TOKEN:-}
 
 if [[ -n "$COMPOSER_GITLAB_OAUTH_TOKEN" ]]; then
 	if curl --fail --silent -H "Private-Token: $COMPOSER_GITLAB_OAUTH_TOKEN" "https://$COMPOSER_GITLAB_OAUTH_HOST/api/v4/license" > /dev/null; then
-		composer config --no-plugins -g "gitlab-oauth.$COMPOSER_GITLAB_OAUTH_HOST" "$COMPOSER_GITLAB_OAUTH_TOKEN" &> /dev/null # redirect outdated version warnings (Composer sends those to STDOUT instead of STDERR)
+		composer config --no-plugins -g "gitlab-token.$COMPOSER_GITLAB_OAUTH_HOST" "$COMPOSER_GITLAB_OAUTH_TOKEN" &> /dev/null # redirect outdated version warnings (Composer sends those to STDOUT instead of STDERR)
 		composer config --no-plugins -g "gitlab-domains" "$COMPOSER_GITLAB_OAUTH_HOST" &> /dev/null # redirect outdated version warnings (Composer sends those to STDOUT instead of STDERR)
 		notice_inline "Using \$COMPOSER_GITLAB_OAUTH_TOKEN for GitLab OAuth ($COMPOSER_GITLAB_OAUTH_HOST)."
 	else
